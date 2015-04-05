@@ -5,7 +5,7 @@
 subset=$1
 
 base_dir='/homes/ycli/rcnn/datasets/VOCdevkit2007/data/'
-annotation_dir=$base_dir/$subset/Annotations
+annotation_dir=$base_dir/$subset/Annotations/
 prefix="gdb --args"
 prefix=
 

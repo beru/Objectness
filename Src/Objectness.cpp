@@ -1053,7 +1053,7 @@ void Objectness::evaluateIJCV13(CStr &saveName)
 
         //numDet = std::min(numDet, boxesTests[i].size());
 	}
-	printf("Load data finished\r");
+	printf("Load data finished\r\n");
 	evaluatePerImgRecall(boxesTests, saveName, numDet);
 	//evaluate(boxesTests, saveName, numDet);
 }
