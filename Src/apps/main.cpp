@@ -34,18 +34,22 @@ int main(int argc, char* argv[])
 void RunObjectness(CStr &resName, double base, int W, int NSS, int numPerSz)
 {
     srand((unsigned int)time(NULL));
-    DataSetVOC voc2007("/home/bittnt/BING/BING_beta1/VOC/VOC2007/");
+    //const char* voc_dir="/homes/ycli/rcnn/datasets/VOCdevkit2007/data/coco-full-100/Annotations/";
+    const char* voc_dir="/homes/ycli/rcnn/datasets/VOCdevkit2007/data/coco-full-100/";
+    DataSetVOC voc2007(voc_dir);
+    //voc2007.cvt2OpenCVYml(voc_dir);
+    //return;
     voc2007.loadAnnotations();
     //voc2007.loadDataGenericOverCls();
 
-    printf("Dataset:`%s' with %d training and %d testing\n", _S(voc2007.wkDir), voc2007.trainNum, voc2007.testNum);
+    printf("Dataset:'%s' with %d training and %d testing\n", _S(voc2007.wkDir), voc2007.trainNum, voc2007.testNum);
     printf("%s Base = %g, W = %d, NSS = %d, perSz = %d\n", _S(resName), base, W, NSS, numPerSz);
 
     Objectness objNess(voc2007, base, W, NSS);
 
     vector<vector<Vec4i>> boxesTests;
-    //objNess.getObjBndBoxesForTests(boxesTests, 250);
-    objNess.getObjBndBoxesForTestsFast(boxesTests, numPerSz);
+    objNess.getObjBndBoxesForTests(boxesTests, 250);
+    //objNess.getObjBndBoxesForTestsFast(boxesTests, numPerSz);
     //objNess.getRandomBoxes(boxesTests);
 
     //objNess.evaluatePerClassRecall(boxesTests, resName, 1000);

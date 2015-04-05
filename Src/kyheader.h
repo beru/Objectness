@@ -30,12 +30,12 @@
 //#include <atlstr.h>
 //#include <atltypes.h>
 #include <omp.h>
-#include <strstream>
+#include <sstream>
 using namespace std;
 
 // TODO: reference additional headers your program requires here
 #include "LibLinear/linear.h"
-#include <opencv2/opencv.hpp> 
+#include <opencv2/opencv.hpp>
 
 #define CV_VERSION_ID CVAUX_STR(CV_MAJOR_VERSION) CVAUX_STR(CV_MINOR_VERSION) CVAUX_STR(CV_SUBMINOR_VERSION)
 #ifdef _DEBUG
@@ -107,4 +107,3 @@ inline Rect Vec4i2Rect(Vec4i &v){return Rect(Point(v[0] - 1, v[1] - 1), Point(v[
 
 #include "CmFile.h"
 #include "CmTimer.h"
-

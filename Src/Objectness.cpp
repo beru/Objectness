@@ -76,7 +76,7 @@ void Objectness::predictBBoxSI(CMat &img3u, ValStructVec<float, Vec4i> &valBoxes
 	valBoxes.reserve(10000);
 	sz.clear(); sz.reserve(10000);
 	for (int ir = numSz - 1; ir >= 0; ir--){
-		int r = _svmSzIdxs[ir]; 
+		int r = _svmSzIdxs[ir];
 		int height = cvRound(pow(_base, r/_numT + _minT)), width = cvRound(pow(_base, r%_numT + _minT));
 		if (height > imgH * _base || width > imgW * _base)
 			continue;
@@ -85,12 +85,12 @@ void Objectness::predictBBoxSI(CMat &img3u, ValStructVec<float, Vec4i> &valBoxes
 		Mat im3u, matchCost1f, mag1u;
 		resize(img3u, im3u, Size(cvRound(_W*imgW*1.0/width), cvRound(_W*imgH*1.0/height)));
 		gradientMag(im3u, mag1u);
-		
-		//imwrite(_voc.localDir + format("%d.png", r), mag1u);	
+
+		//imwrite(_voc.localDir + format("%d.png", r), mag1u);
         //Mat mag1f;
         //mag1u.convertTo(mag1f, CV_32F);
         //matchTemplate(mag1f, _svmFilter, matchCost1f, CV_TM_CCORR);
-		
+
         matchCost1f = _tigF.matchTemplate(mag1u);
 
 		ValStructVec<float, Point> matchCost;
@@ -107,7 +107,7 @@ void Objectness::predictBBoxSI(CMat &img3u, ValStructVec<float, Vec4i> &valBoxes
 			box[3] = cvRound(min(box[1] + height, imgH));
 			box[0] ++;
 			box[1] ++;
-			valBoxes.pushBack(mVal, box); 
+			valBoxes.pushBack(mVal, box);
 			sz.push_back(ir);
 		}
 	}
@@ -119,7 +119,7 @@ void Objectness::predictBBoxSII(ValStructVec<float, Vec4i> &valBoxes, const vecI
 	int numI = valBoxes.size();
 	for (int i = 0; i < numI; i++){
 		const float* svmIIw = _svmReW1f.ptr<float>(sz[i]);
-		valBoxes(i) = valBoxes(i) * svmIIw[0] + svmIIw[1]; 
+		valBoxes(i) = valBoxes(i) * svmIIw[0] + svmIIw[1];
 	}
 	valBoxes.sort();
 }
@@ -183,7 +183,7 @@ void Objectness::gradientMag(CMat &imgBGR3u, Mat &mag1u)
 	switch (_Clr){
 	case MAXBGR:
 		gradientRGB(imgBGR3u, mag1u); break;
-	case G:		
+	case G:
 		gradientGray(imgBGR3u, mag1u); break;
 	case HSV:
 		gradientHSV(imgBGR3u, mag1u); break;
@@ -206,7 +206,7 @@ void Objectness::gradientRGB(CMat &bgr3u, Mat &mag1u)
 	// Top/bottom most column Iy
 	for (int x = 0; x < W; x++)	{
 		Iy.at<int>(0, x) = bgrMaxDist(bgr3u.at<Vec3b>(1, x), bgr3u.at<Vec3b>(0, x))*2;
-		Iy.at<int>(H-1, x) = bgrMaxDist(bgr3u.at<Vec3b>(H-1, x), bgr3u.at<Vec3b>(H-2, x))*2; 
+		Iy.at<int>(H-1, x) = bgrMaxDist(bgr3u.at<Vec3b>(H-1, x), bgr3u.at<Vec3b>(H-2, x))*2;
 	}
 
 	// Find the gradient for inner regions
@@ -227,7 +227,7 @@ void Objectness::gradientRGB(CMat &bgr3u, Mat &mag1u)
 void Objectness::gradientGray(CMat &bgr3u, Mat &mag1u)
 {
 	Mat g1u;
-	cvtColor(bgr3u, g1u, CV_BGR2GRAY); 
+	cvtColor(bgr3u, g1u, CV_BGR2GRAY);
 	const int H = g1u.rows, W = g1u.cols;
 	Mat Ix(H, W, CV_32S), Iy(H, W, CV_32S);
 
@@ -240,7 +240,7 @@ void Objectness::gradientGray(CMat &bgr3u, Mat &mag1u)
 	// Top/bottom most column Iy
 	for (int x = 0; x < W; x++)	{
 		Iy.at<int>(0, x) = abs(g1u.at<byte>(1, x) - g1u.at<byte>(0, x)) * 2;
-		Iy.at<int>(H-1, x) = abs(g1u.at<byte>(H-1, x) - g1u.at<byte>(H-2, x)) * 2; 
+		Iy.at<int>(H-1, x) = abs(g1u.at<byte>(H-1, x) - g1u.at<byte>(H-2, x)) * 2;
 	}
 
 	// Find the gradient for inner regions
@@ -271,7 +271,7 @@ void Objectness::gradientHSV(CMat &bgr3u, Mat &mag1u)
 	// Top/bottom most column Iy
 	for (int x = 0; x < W; x++)	{
 		Iy.at<int>(0, x) = vecDist3b(hsv3u.at<Vec3b>(1, x), hsv3u.at<Vec3b>(0, x));
-		Iy.at<int>(H-1, x) = vecDist3b(hsv3u.at<Vec3b>(H-1, x), hsv3u.at<Vec3b>(H-2, x)); 
+		Iy.at<int>(H-1, x) = vecDist3b(hsv3u.at<Vec3b>(H-1, x), hsv3u.at<Vec3b>(H-2, x));
 	}
 
 	// Find the gradient for inner regions
@@ -301,7 +301,7 @@ void Objectness::trainObjectness(int numDetPerSize)
 {
     CmTimer tm1("Train1"), tm2("Train 2");
 
-	//* Learning stage I    
+	//* Learning stage I
 	generateTrianData();
     tm1.Start();
 	trainStageI();
@@ -321,7 +321,7 @@ void Objectness::generateTrianData()
 	const int NUM_TRAIN = _voc.trainNum;
 	const int FILTER_SZ = _W*_W;
 	vector<vector<Mat>> xTrainP(NUM_TRAIN), xTrainN(NUM_TRAIN);
-	vector<vecI> szTrainP(NUM_TRAIN); // Corresponding size index. 
+	vector<vecI> szTrainP(NUM_TRAIN); // Corresponding size index.
 	const int NUM_NEG_BOX = 100; // Number of negative windows sampled from each image
 
 #pragma omp parallel for
@@ -347,7 +347,7 @@ void Objectness::generateTrianData()
 				xP.push_back(magF1f);
 				szP.push_back(bbR[j]);
 				szP.push_back(bbR[j]);
-			}			
+			}
 		}
 		// Get negative training data
 		for (int k = 0; k < NUM_NEG_BOX; k++){
@@ -358,9 +358,9 @@ void Objectness::generateTrianData()
 				xN.push_back(getFeature(im3u, bb));
 		}
 	}
-	
+
 	const int NUM_R = _numT * _numT + 1;
-	vecI szCount(NUM_R); // Object counts of each size (combination of scale and aspect ratio) 
+	vecI szCount(NUM_R); // Object counts of each size (combination of scale and aspect ratio)
 	int numP = 0, numN = 0, iP = 0, iN = 0;
 	for (int i = 0; i < NUM_TRAIN; i++){
 		numP += xTrainP[i].size();
@@ -372,7 +372,7 @@ void Objectness::generateTrianData()
 	vecI szActive; // Indexes of active size
 	for (int r = 1; r < NUM_R; r++){
 		if (szCount[r] > 50) // If only 50- positive samples at this size, ignore it.
-			szActive.push_back(r-1);			
+			szActive.push_back(r-1);
 	}
 	matWrite(_modelName + ".idx", Mat(szActive));
 
@@ -392,6 +392,9 @@ void Objectness::generateTrianData()
 Mat Objectness::getFeature(CMat &img3u, const Vec4i &bb)
 {
 	int x = bb[0] - 1, y = bb[1] - 1;
+
+    //if (x < 0) x = 0;
+    //if (y < 0) y = 0;
 	Rect reg(x, y, bb[2] -  x, bb[3] - y);
 	Mat subImg3u, mag1f, mag1u;
 	resize(img3u(reg), subImg3u, Size(_W, _W));
@@ -461,7 +464,7 @@ void Objectness::trainStateII(int numPerSz)
 	}
 
 	const int NUM_SZ = _svmSzIdxs.size();
-	const int maxTrainNum = 100000;
+	const int maxTrainNum = 1000000;
 	vector<vecM> rXP(NUM_SZ), rXN(NUM_SZ);
 	for (int r = 0; r < NUM_SZ; r++){
 		rXP[r].reserve(maxTrainNum);
@@ -476,7 +479,7 @@ void Objectness::trainStateII(int numPerSz)
 			CV_Assert(r >= 0 && r < NUM_SZ);
 			if (y[j] == 1)
 				rXP[r].push_back(Mat(1, 1, CV_32F, &val[j]));
-			else 
+			else
 				rXN[r].push_back(Mat(1, 1, CV_32F, &val[j]));
 		}
 	}
@@ -485,7 +488,7 @@ void Objectness::trainStateII(int numPerSz)
 	for (int i = 0; i < NUM_SZ; i++){
 		const vecM &xP = rXP[i], &xN = rXN[i];
 		if (xP.size() < 10 || xN.size() < 10)
-			printf("Warning %s:%d not enough training sample for r[%d] = %d. P = %d, N = %d\n", __FILE__, __LINE__, i, _svmSzIdxs[i], xP.size(), xN.size());	
+			printf("Warning %s:%d not enough training sample for r[%d] = %d. P = %d, N = %d\n", __FILE__, __LINE__, i, _svmSzIdxs[i], xP.size(), xN.size());
 		for (size_t k = 0; k < xP.size(); k++)
 			CV_Assert(xP[k].size() == Size(1, 1) && xP[k].type() == CV_32F);
 
@@ -534,8 +537,8 @@ void Objectness::illustrate()
 	stdDevN.reshape(1, _W).copyTo(stdDev.colRange(_W, _W*2));
 	normalize(meanV, meanV, 0, 255, NORM_MINMAX, CV_8U);
 	CmShow::showTinyMat(_voc.resDir + "PosNeg.png", meanV);
-	
-	FILE* f = fopen(_S(_voc.resDir + "PosNeg.m"), "w"); 
+
+	FILE* f = fopen(_S(_voc.resDir + "PosNeg.m"), "w");
 	CV_Assert(f != NULL);
 	fprintf(f, "figure(1);\n\n");
 	PrintVector(f, getVector(meanP), "MeanP");
@@ -544,7 +547,7 @@ void Objectness::illustrate()
 	PrintVector(f, getVector(stdDevN), "StdDevN");
 	PrintVector(f, getVector(_svmFilter), "Filter");
 	fprintf(f, "hold on;\nerrorbar(MeanP, StdDevP, 'r');\nerrorbar(MeanN, StdDevN, 'g');\nhold off;");
-	fclose(f);	
+	fclose(f);
 }
 
 void Objectness::trainStageI()
@@ -563,7 +566,7 @@ void Objectness::trainStageI()
 	matWrite(_modelName + ".wS1", crntW);
 }
 
-// Training SVM with feature vector X and label Y. 
+// Training SVM with feature vector X and label Y.
 // Each row of X is a feature vector, with corresponding label in Y.
 // Return a CV_32F weight Mat
 Mat Objectness::trainSVM(CMat &X1f, const vecI &Y, int sT, double C, double bias, double eps)
@@ -626,7 +629,7 @@ Mat Objectness::trainSVM(CMat &X1f, const vecI &Y, int sT, double C, double bias
 	return wMat;
 }
 
-// pX1f, nX1f are positive and negative training samples, each is a row vector 
+// pX1f, nX1f are positive and negative training samples, each is a row vector
 Mat Objectness::trainSVM(const vector<Mat> &pX1f, const vector<Mat> &nX1f, int sT, double C, double bias, double eps, int maxTrainNum)
 {
 	vecI ind(nX1f.size());
@@ -739,7 +742,7 @@ void Objectness::getObjBndBoxesForTestsFast(vector<vector<Vec4i>> &_boxesTests, 
 #pragma omp parallel for
 	for (int i = 0; i < TestNum; i++)
 		getObjBndBoxes(imgs3u[i], boxesTests[i], numDetPerSize);
-	
+
 	tm.Stop();
 	printf("Average time for predicting an image (%s) is %gs\n", _clrName[_Clr], tm.TimeInSeconds()/TestNum);
 
@@ -788,10 +791,16 @@ void Objectness::evaluatePerImgRecall(const vector<vector<Vec4i>> &boxesTests, C
 	vecD recalls(NUM_WIN);
 	vecD avgScore(NUM_WIN);
 	const int TEST_NUM = _voc.testSet.size();
+    int valid_test = 0;
 	for (int i = 0; i < TEST_NUM; i++){
 		const vector<Vec4i> &boxesGT = _voc.gtTestBoxes[i];
 		const vector<Vec4i> &boxes = boxesTests[i];
 		const int gtNumCrnt = boxesGT.size();
+
+        if (gtNumCrnt == 0)
+            continue;
+        ++valid_test;
+
 		vecI detected(gtNumCrnt);
 		vecD score(gtNumCrnt);
 		double sumDetected = 0, abo = 0;
@@ -808,7 +817,7 @@ void Objectness::evaluatePerImgRecall(const vector<vector<Vec4i>> &boxesTests, C
 				detected[k] = score[k] >= 0.5 ? 1 : 0;
 			}
 			sumDetected = 0, abo = 0;
-			for (int k = 0; k < gtNumCrnt; k++)	
+			for (int k = 0; k < gtNumCrnt; k++)
 				sumDetected += detected[k], abo += score[k];
 			recalls[j] += sumDetected/gtNumCrnt;
 			avgScore[j] += abo/gtNumCrnt;
@@ -816,8 +825,8 @@ void Objectness::evaluatePerImgRecall(const vector<vector<Vec4i>> &boxesTests, C
 	}
 
 	for (int i = 0; i < NUM_WIN; i++){
-		recalls[i] /=  TEST_NUM;
-		avgScore[i] /= TEST_NUM;
+		recalls[i] /=  valid_test;
+		avgScore[i] /= valid_test;
 	}
 
 	int idx[8] = {1, 10, 100, 1000, 2000, 3000, 4000, 5000};
@@ -827,14 +836,14 @@ void Objectness::evaluatePerImgRecall(const vector<vector<Vec4i>> &boxesTests, C
 		printf("%d:%.3g,%.3g\t", idx[i], recalls[idx[i] - 1], avgScore[idx[i] - 1]);
 	}
 	printf("\n");
-	
-	FILE* f = fopen(_S(_voc.resDir + saveName), "w"); 
+
+	FILE* f = fopen(_S(_voc.resDir + saveName), "w");
 	CV_Assert(f != NULL);
 	fprintf(f, "figure(1);\n\n");
 	PrintVector(f, recalls, "DR");
 	PrintVector(f, avgScore, "MABO");
 	fprintf(f, "semilogx(1:%d, DR(1:%d));\nhold on;\nsemilogx(1:%d, DR(1:%d));\naxis([1, 5000, 0, 1]);\nhold off;\n", NUM_WIN, NUM_WIN, NUM_WIN, NUM_WIN);
-	fclose(f);	
+	fclose(f);
 }
 
 void Objectness::illuTestReults(const vector<vector<Vec4i>> &boxesTests)
@@ -875,7 +884,7 @@ void Objectness::illuTestReults(const vector<vector<Vec4i>> &boxesTests)
 	}
 }
 
-void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr &saveName, const int WIN_NUM) 
+void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr &saveName, const int WIN_NUM)
 {
 	const int TEST_NUM = _voc.testSet.size(), CLS_NUM = _voc.classNames.size();
 	if (boxesTests.size() != TEST_NUM){
@@ -894,7 +903,7 @@ void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr 
 			printf("%s.dat: %d, %d\n", _S(_voc.testSet[i]), boxesTests[i].size(), WIN_NUM);
 			boxesTests[i].resize(WIN_NUM);
 		}
-	
+
 
 	// #class by #win matrix for saving correct detection number and gt number
 	Mat crNum1i = Mat::zeros(CLS_NUM, WIN_NUM, CV_32S);
@@ -954,7 +963,7 @@ void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr 
 		fprintf(f, "plot(WinNum, %s, %s, 'linewidth', 2);\n", "objects", COLORs[(CLS_NUM+1) % CN]);
 		leglendStr += format("'%s', ", "objects");
 		leglendStr.resize(leglendStr.size() - 2);
-		leglendStr += ");";		
+		leglendStr += ");";
 		fprintf(f, "%s\nhold off;\nxlabel('#WIN');\nylabel('Recall');\ngrid on;\naxis([0 %d 0 1]);\n", _S(leglendStr), WIN_NUM);
 		fprintf(f, "[class([1,10,100,1000]);objects([1,10,100,1000])]\ntitle('%s')\n", _S(saveName));
 		fclose(f);
@@ -1022,7 +1031,7 @@ void Objectness::evaluatePAMI12(CStr &saveName)
 		}
 		fclose(f);
 	}
-	printf("Load data finished\r");
+	printf("Load data finished\n");
 	//evaluatePerImgRecall(boxesTests, saveName, numDet);
 	evaluatePerClassRecall(boxesTests, saveName, numDet);
 }
@@ -1031,16 +1040,18 @@ void Objectness::evaluateIJCV13(CStr &saveName)
 {
 	const int TEST_NUM = _voc.testSet.size();
 	vector<vector<Vec4i>> boxesTests(TEST_NUM);
-	CStr dir = _voc.wkDir + "IJCV13/";
-	const int numDet = 10000;
+	CStr dir = _voc.wkDir + "IJCV2013/";
+	size_t numDet = 10000;
 	for (int i = 0; i < TEST_NUM; i++){
-		FILE *f = fopen(_S(dir + _voc.testSet[i] + ".txt"), "r");
-		boxesTests[i].resize(numDet);
-		for (int j = 0; j < numDet; j++){
-			Vec4i &v = boxesTests[i][j];
-			fscanf(f, "%d, %d, %d, %d\n", &v[1], &v[0], &v[3], &v[2]);
-		}
-		fclose(f);
+        string fn = dir + _voc.testSet[i] + ".txt";
+        ifstream in(_S(fn));
+        boxesTests[i].clear();
+        Vec4i tmp;
+        char comma;
+        while(in >> tmp[1] >> comma >> tmp[0] >> comma  >> tmp[3] >> comma  >> tmp[2])
+            boxesTests[i].push_back(tmp);
+
+        //numDet = std::min(numDet, boxesTests[i].size());
 	}
 	printf("Load data finished\r");
 	evaluatePerImgRecall(boxesTests, saveName, numDet);

@@ -1,3 +1,10 @@
+
+addpath('/homes/ycli/rcnn/datasets/VOCdevkit2007/VOCcode/');
+addpath(genpath('./YAML/'));
+%wkDir = '/homes/ycli/rcnn/datasets/VOCdevkit2007/data/coco-full-100/Annotations/';
+xml2yaml(wkDir);
+
+return
 wkDir = 'D:/WkDir/DetectionProposals/VOC2007/Annotations/';
 xml2yaml(wkDir);
 wkDir = 'D:\WkDir\DetectionProposals\ImageNet\ILSVRC2012_bbox_val_v3\val\';
@@ -13,5 +20,3 @@ for i=1:length(nameFolds)
     fprintf('%d/%d: %s\n', i, length(nameFolds), wkDir);
     xml2yaml(wkDir);
 end
-
-

@@ -13,10 +13,10 @@ DataSetVOC::DataSetVOC(CStr &_wkDir)
 	CmFile::MkDir(localDir);
 
     trainSet = CmFile::loadStrList(wkDir + "ImageSets/Main/train.txt");
-    testSet = CmFile::loadStrList(wkDir + "ImageSets/Main/test.txt");
-	classNames = CmFile::loadStrList(wkDir + "ImageSets/Main/class.txt");
+    testSet = CmFile::loadStrList(wkDir + "ImageSets/Main/val.txt");
+	classNames = CmFile::loadStrList(wkDir + "cls-list.txt");
 
-	// testSet.insert(testSet.end(), trainSet.begin(), trainSet.end());	
+	// testSet.insert(testSet.end(), trainSet.begin(), trainSet.end());
 	// testSet.resize(min(1000, (int)testSet.size()));
 
 	trainNum = trainSet.size();
@@ -110,7 +110,15 @@ void DataSetVOC::loadBox(const FileNode &fn, vector<Vec4i> &boxes, vecI &clsIdx)
 	string isDifficult;
 	fn["difficult"]>>isDifficult;
 	if (isDifficult == "1")
-		return; 
+		return;
+
+	string clsName;
+	fn["name"]>>clsName;
+    int idx = findFromList(clsName, classNames);
+
+    if (idx == -1)
+        return;
+	clsIdx.push_back(idx);
 
 	string strXmin, strYmin, strXmax, strYmax;
 	fn["bndbox"]["xmin"] >> strXmin;
@@ -119,10 +127,6 @@ void DataSetVOC::loadBox(const FileNode &fn, vector<Vec4i> &boxes, vecI &clsIdx)
 	fn["bndbox"]["ymax"] >> strYmax;
 	boxes.push_back(Vec4i(atoi(_S(strXmin)), atoi(_S(strYmin)), atoi(_S(strXmax)), atoi(_S(strYmax))));
 
-	string clsName;
-	fn["name"]>>clsName;
-	clsIdx.push_back(findFromList(clsName, classNames));	
-	CV_Assert_(clsIdx[clsIdx.size() - 1] >= 0, ("Invalidate class name\n"));
 }
 
 bool DataSetVOC::loadBBoxes(CStr &nameNE, vector<Vec4i> &boxes, vecI &clsIdx)
@@ -130,6 +134,14 @@ bool DataSetVOC::loadBBoxes(CStr &nameNE, vector<Vec4i> &boxes, vecI &clsIdx)
 	string fName = format(_S(annoPathW), _S(nameNE));
 	FileStorage fs(fName, FileStorage::READ);
 	FileNode fn = fs["annotation"]["object"];
+
+    string widthStr, heightStr;
+    fs["annotation"]["size"]["width"] >> widthStr;
+    fs["annotation"]["size"]["height"] >> heightStr;
+
+    int cols = atoi(_S(widthStr));
+    int rows = atoi(_S(heightStr));
+
 	boxes.clear();
 	clsIdx.clear();
 	if (fn.isSeq()){
@@ -139,6 +151,13 @@ bool DataSetVOC::loadBBoxes(CStr &nameNE, vector<Vec4i> &boxes, vecI &clsIdx)
 	}
 	else
 		loadBox(fn, boxes, clsIdx);
+
+    for (auto boxes_iter = boxes.begin(); boxes_iter != boxes.end(); boxes_iter++) {
+        (*boxes_iter)[0] = max(1, (*boxes_iter)[0]);
+        (*boxes_iter)[1] = max(1, (*boxes_iter)[1]);
+        (*boxes_iter)[2] = min(cols, (*boxes_iter)[2]);
+        (*boxes_iter)[3] = min(rows, (*boxes_iter)[3]);
+    }
 	return true;
 }
 
@@ -149,7 +168,7 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &annoDir)
 	int imgNum = CmFile::GetNamesNE(annoDir + "*.yaml", namesNE);
 	printf("Converting annotations to OpenCV yml format:\n");
 	for (int i = 0; i < imgNum; i++){
-		printf("%d/%d %s.yaml\r", i, imgNum, _S(namesNE[i]));	
+		printf("%d/%d %s.yaml\r", i, imgNum, _S(namesNE[i]));
 		string fPath = annoDir + namesNE[i];
 		cvt2OpenCVYml(fPath + ".yaml", fPath + ".yml");
 	}
@@ -158,8 +177,8 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &annoDir)
 
 // Needs to call yml.m in this solution before running this function.
 bool DataSetVOC::cvt2OpenCVYml(CStr &yamlName, CStr &ymlName)
-{	
-	ifstream f(yamlName);	
+{
+	ifstream f(yamlName);
 	FILE *fO = fopen(_S(ymlName), "w");
 	if (!f.is_open() && fO == NULL)
 		return false;
@@ -169,7 +188,7 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &yamlName, CStr &ymlName)
 	int addIdent = 0;
 	while(getline(f, line)){
 		if (line.substr(0, 12) == "  filename: ")
-			line = "  filename: \"" + line.substr(12) + "\"";			
+			line = "  filename: \"" + line.substr(12) + "\"";
 		int tmp = line.find_first_of('-');
 		if (tmp != string::npos){
 			bool allSpace = true;
