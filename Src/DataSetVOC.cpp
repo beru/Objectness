@@ -4,6 +4,7 @@
 
 DataSetVOC::DataSetVOC(CStr &_wkDir)
 {
+
 	wkDir = _wkDir;
 	resDir = wkDir + "Results/";
 	localDir = wkDir + "Local/";
@@ -189,10 +190,10 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &yamlName, CStr &ymlName)
 	while(getline(f, line)){
 		if (line.substr(0, 12) == "  filename: ")
 			line = "  filename: \"" + line.substr(12) + "\"";
-		int tmp = line.find_first_of('-');
+		size_t tmp = line.find_first_of('-');
 		if (tmp != string::npos){
 			bool allSpace = true;
-			for (int k = 0; k < tmp; k++)
+			for (size_t k = 0; k < tmp; k++)
 				if (line[k] != ' ')
 					allSpace = false;
 			if (allSpace)
@@ -214,9 +215,9 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &yamlName, CStr &ymlName)
 // Get training and testing for demonstrating the generative of the objectness over classes
 void DataSetVOC::getTrainTest()
 {
-	const int TRAIN_CLS_NUM = 6;
-	string trainCls[TRAIN_CLS_NUM] = {"bird", "car", "cat", "cow", "dog", "sheep"};
-
+	//const int TRAIN_CLS_NUM = 6;
+	//string trainCls[TRAIN_CLS_NUM] = {"bird", "car", "cat", "cow", "dog", "sheep"};
+    return;
 }
 
 void DataSetVOC::getXmlStrVOC(CStr &fName, string &buf)
@@ -231,7 +232,7 @@ void DataSetVOC::getXmlStrVOC(CStr &fName, string &buf)
 		int endP = strLine.find_last_of("<");
 		if (endP > startP){
 			string val = keepXmlChar(strLine.substr(startP, endP - startP));
-			if (val.size() < endP - startP)
+			if (val.size() < (unsigned)(endP - startP))
 				strLine = strLine.substr(0, startP) + val + strLine.substr(endP);
 		}
 		buf += strLine + "\n";

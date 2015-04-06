@@ -8,7 +8,9 @@
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 #define INF HUGE_VAL
 
+#ifdef WIN32
 #pragma warning(disable:4996)
+#endif
 
 void print_null(const char *s) {}
 

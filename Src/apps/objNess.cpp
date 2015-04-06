@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[])
 {
-    int W = 8, NSS = 2, numPerSz = 130;
+    int W = 8, NSS = 2;
     double base = 2.0;
     srand((unsigned int)time(NULL));
 

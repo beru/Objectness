@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[])
 {
-    int W = 2, NSS = 8, numPerSz = 130;
+    int W = 2, NSS = 8;
     double base = 2.0;
     if (argc < 2)
     {

@@ -2,7 +2,7 @@
 #include <sys/time.h>
 class CmTimer
 {
-public:	
+public:
     CmTimer(CStr t):title(t) { is_started = false; gettimeofday(&start_clock,NULL); gettimeofday(&end_clock,NULL); n_starts = 0; }
 
 	~CmTimer(){	if (is_started) printf("CmTimer '%s' is started and is being destroyed.\n", title.c_str());	}
@@ -17,7 +17,7 @@ public:
 
 private:
 	CStr title;
-	
+
 	bool is_started;
     struct timeval start_clock, end_clock;
     //clock_t start_clock;
@@ -56,7 +56,7 @@ void CmTimer::Stop()
 void CmTimer::Reset()
 {
 	if (is_started)	{
-		printf("CmTimer '%s'is started during reset request.\n Only reset cumulative time.\n");
+		printf("CmTimer is started during reset request.\n Only reset cumulative time.\n");
 		return;
 	}
     gettimeofday(&start_clock,NULL);
@@ -86,4 +86,3 @@ float CmTimer::TimeInSeconds()
              end_clock.tv_usec - start_clock.tv_usec) / 1.e6;
     //return float(cumulative_clock) / CLOCKS_PER_SEC;
 }
-

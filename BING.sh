@@ -1,8 +1,7 @@
 #!/bin/bash
 # vim ft=sh
 
-subset=$1
-base_dir='/homes/ycli/rcnn/datasets/VOCdevkit2007/data/'
+wkDir=$1
 prefix="gdb --args"
-prefix=
-$prefix build/objNess $base_dir/$subset/
+#prefix=
+$prefix build/objNess $wkDir

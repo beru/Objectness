@@ -1,5 +1,5 @@
 
-addpath('/homes/ycli/rcnn/datasets/VOCdevkit2007/VOCcode/');
+addpath('/u/yli/workspace/rcnn/datasets/VOCdevkit2007/VOCcode/');
 addpath(genpath('./YAML/'));
 %wkDir = '/homes/ycli/rcnn/datasets/VOCdevkit2007/data/coco-full-100/Annotations/';
 xml2yaml(wkDir);

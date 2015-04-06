@@ -3,10 +3,13 @@
 // are changed infrequently
 //
 #pragma once
+
+#ifdef WIN32
 #pragma warning(disable: 4996)
 #pragma warning(disable: 4995)
 #pragma warning(disable: 4805)
 #pragma warning(disable: 4267)
+#endif
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -44,11 +47,12 @@ using namespace std;
 #define cvLIB(name) "opencv_" name CV_VERSION_ID
 #endif
 
+
+using namespace cv;
+#ifdef WIN32
 #pragma comment( lib, cvLIB("core"))
 #pragma comment( lib, cvLIB("imgproc"))
 #pragma comment( lib, cvLIB("highgui"))
-using namespace cv;
-#ifdef WIN32
 /* windows stuff */
 #else
 typedef unsigned long DWORD;

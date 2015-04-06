@@ -1,7 +1,9 @@
 #ifndef _TRON_H
 #define _TRON_H
 
+#ifdef WIN32
 #pragma warning(disable:4996)
+#endif
 
 class function
 {

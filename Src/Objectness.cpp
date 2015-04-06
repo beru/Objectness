@@ -14,15 +14,15 @@ const char* COLORs[CN] = {"'k'", "'b'", "'g'", "'r'", "'c'", "'m'", "'y'",
 
 // base for window size quantization, R orientation channels, and feature window size (_W, _W)
 Objectness::Objectness(DataSetVOC &voc, double base, int W, int NSS)
-	: _voc(voc)
-	, _base(base)
+	: _base(base)
+	, _logBase(log(_base))
 	, _W(W)
 	, _NSS(NSS)
-	, _logBase(log(_base))
-	, _minT(cvCeil(log(10.)/_logBase))
 	, _maxT(cvCeil(log(500.)/_logBase))
+	, _minT(cvCeil(log(10.)/_logBase))
 	, _numT(_maxT - _minT + 1)
 	, _Clr(MAXBGR)
+	, _voc(voc)
 {
 	setColorSpace(_Clr);
 }
@@ -453,10 +453,10 @@ void Objectness::trainStateII(int numPerSz)
 		vecF &val = VAL[i];
 		CStr imgPath = format(_S(_voc.imgPathW), _S(_voc.trainSet[i]));
 		predictBBoxSI(imread(imgPath), valBoxes, sz, numPerSz, false);
-		const int num = valBoxes.size();
+		const size_t num = valBoxes.size();
 		CV_Assert(sz.size() == num);
 		y.resize(num), val.resize(num);
-		for (int j = 0; j < num; j++){
+		for (size_t j = 0; j < num; j++){
 			Vec4i bb = valBoxes[j];
 			val[j] = valBoxes(j);
 			y[j] = maxIntUnion(bb, bbgts) >= 0.5 ? 1 : -1;
@@ -488,7 +488,7 @@ void Objectness::trainStateII(int numPerSz)
 	for (int i = 0; i < NUM_SZ; i++){
 		const vecM &xP = rXP[i], &xN = rXN[i];
 		if (xP.size() < 10 || xN.size() < 10)
-			printf("Warning %s:%d not enough training sample for r[%d] = %d. P = %d, N = %d\n", __FILE__, __LINE__, i, _svmSzIdxs[i], xP.size(), xN.size());
+			printf("Warning %s:%d not enough training sample for r[%d] = %d. P = %ld, N = %ld\n", __FILE__, __LINE__, i, _svmSzIdxs[i], xP.size(), xN.size());
 		for (size_t k = 0; k < xP.size(); k++)
 			CV_Assert(xP[k].size() == Size(1, 1) && xP[k].type() == CV_32F);
 
@@ -581,7 +581,7 @@ Mat Objectness::trainSVM(CMat &X1f, const vecI &Y, int sT, double C, double bias
 		param.weight_label = NULL;
 		param.weight = NULL;
 		set_print_string_function(print_null);
-		CV_Assert(X1f.rows == Y.size() && X1f.type() == CV_32F);
+		CV_Assert((size_t)X1f.rows == Y.size() && X1f.type() == CV_32F);
 	}
 
 	// Initialize a problem
@@ -694,7 +694,7 @@ void Objectness::getObjBndBoxesForTests(vector<vector<Vec4i>> &_boxesTests, int 
 		ValStructVec<float, Vec4i> &boxes = boxesTests[i];
 		FILE *f = fopen(_S(fName + ".txt"), "w");
 		fprintf(f, "%d\n", boxes.size());
-		for (size_t k = 0; k < boxes.size(); k++)
+		for (int k = 0; k < boxes.size(); k++)
 			fprintf(f, "%g, %s\n", boxes(k), _S(strVec4i(boxes[k])));
 		fclose(f);
 
@@ -755,7 +755,7 @@ void Objectness::getObjBndBoxesForTestsFast(vector<vector<Vec4i>> &_boxesTests, 
 		ValStructVec<float, Vec4i> &boxes = boxesTests[i];
 		FILE *f = fopen(_S(fName + ".txt"), "w");
 		fprintf(f, "%d\n", boxes.size());
-		for (size_t k = 0; k < boxes.size(); k++)
+		for (int k = 0; k < boxes.size(); k++)
 			fprintf(f, "%g, %s\n", boxes(k), _S(strVec4i(boxes[k])));
 		fclose(f);
 
@@ -862,8 +862,8 @@ void Objectness::illuTestReults(const vector<vector<Vec4i>> &boxesTests)
 
 		vecD score(gtNumCrnt);
 		vector<Vec4i> bboxMatch(gtNumCrnt);
-		for (int j = 0; j < boxes.size(); j++){
-			const Vec4i &bb = boxes[j];
+		for (size_t j = 0; j < boxes.size(); j++){
+			//const Vec4i &bb = boxes[j];
 			for (int k = 0; k < gtNumCrnt; k++)	{
 				double mVal = DataSetVOC::interUnio(boxes[j], boxesGT[k]);
 				if (mVal < score[k])
@@ -886,21 +886,21 @@ void Objectness::illuTestReults(const vector<vector<Vec4i>> &boxesTests)
 
 void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr &saveName, const int WIN_NUM)
 {
-	const int TEST_NUM = _voc.testSet.size(), CLS_NUM = _voc.classNames.size();
+	const size_t TEST_NUM = _voc.testSet.size(), CLS_NUM = _voc.classNames.size();
 	if (boxesTests.size() != TEST_NUM){
 		boxesTests.resize(TEST_NUM);
-		for (int i = 0; i < TEST_NUM; i++){
+		for (size_t i = 0; i < TEST_NUM; i++){
 			Mat boxes;
 			matRead(_voc.localDir + _voc.testSet[i] + ".dat", boxes);
-			Vec4i* d = (Vec4i*)boxes.data;
+			//Vec4i* d = (Vec4i*)boxes.data;
 			boxesTests[i].resize(boxes.rows, WIN_NUM);
 			memcpy(&boxesTests[i][0], boxes.data, sizeof(Vec4i)*boxes.rows);
 		}
 	}
 
-	for (int i = 0; i < TEST_NUM; i++)
+	for (size_t i = 0; i < TEST_NUM; i++)
 		if ((int)boxesTests[i].size() < WIN_NUM){
-			printf("%s.dat: %d, %d\n", _S(_voc.testSet[i]), boxesTests[i].size(), WIN_NUM);
+			printf("%s.dat: %ld, %d\n", _S(_voc.testSet[i]), boxesTests[i].size(), WIN_NUM);
 			boxesTests[i].resize(WIN_NUM);
 		}
 
@@ -908,7 +908,7 @@ void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr 
 	// #class by #win matrix for saving correct detection number and gt number
 	Mat crNum1i = Mat::zeros(CLS_NUM, WIN_NUM, CV_32S);
 	vecD gtNums(CLS_NUM); {
-		for (int i = 0; i < TEST_NUM; i++){
+		for (size_t i = 0; i < TEST_NUM; i++){
 			const vector<Vec4i> &boxes = boxesTests[i];
 			const vector<Vec4i> &boxesGT = _voc.gtTestBoxes[i];
 			const vecI &clsGT = _voc.gtTestClsIdx[i];
@@ -938,7 +938,7 @@ void Objectness::evaluatePerClassRecall(vector<vector<Vec4i>> &boxesTests, CStr 
 		fprintf(f, "\n");
 		string leglendStr("legend(");
 		double sumObjs = 0;
-		for (int c = 0; c < CLS_NUM; c++){
+		for (size_t c = 0; c < CLS_NUM; c++){
 			sumObjs += gtNums[c];
 			memset(&val[0], 0, sizeof(double)*WIN_NUM);
 			int* crNum = crNum1i.ptr<int>(c);
@@ -1001,7 +1001,7 @@ bool Objectness::matRead(const string& filename, Mat& _M){
 	if (f == NULL)
 		return false;
 	char buf[8];
-	int pre = fread(buf,sizeof(char), 5, f);
+	fread(buf,sizeof(char), 5, f);
 	if (strncmp(buf, "CmMat", 5) != 0)	{
 		printf("Invalidate CvMat data file %s\n", _S(filename));
 		return false;
@@ -1027,7 +1027,7 @@ void Objectness::evaluatePAMI12(CStr &saveName)
 		boxesTests[i].resize(numDet);
 		for (int j = 0; j < numDet; j++){
 			Vec4i &v = boxesTests[i][j];
-			fscanf(f, "%d %d %d %d %g\n", &v[0], &v[1], &v[2], &v[3], &score);
+			fscanf(f, "%d %d %d %d %lg\n", &v[0], &v[1], &v[2], &v[3], &score);
 		}
 		fclose(f);
 	}
