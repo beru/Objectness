@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="LibLinear">
+      <UniqueIdentifier>{6b8617d6-9ef6-4987-b428-1e69af9d7382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LibLinear\blas">
+      <UniqueIdentifier>{b45a0205-2cb8-4979-9599-8bbb421000d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vc">
+      <UniqueIdentifier>{d6fb6887-0036-42dc-a5b3-11905bca1ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="apps">
+      <UniqueIdentifier>{cdbfde68-4066-45b0-a01f-8706141659b1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CmFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CmShow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CmTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DataSetVOC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FilterTIG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImgContrastBB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\kyheader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Objectness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ValStructVec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibLinear\linear.h">
+      <Filter>LibLinear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibLinear\tron.h">
+      <Filter>LibLinear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibLinear\blas\blas.h">
+      <Filter>LibLinear\blas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibLinear\blas\blasp.h">
+      <Filter>LibLinear\blas</Filter>
+    </ClInclude>
+    <ClInclude Include="dirent.h">
+      <Filter>vc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CmShow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataSetVOC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FilterTIG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kyheader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Objectness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CmFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\linear.cpp">
+      <Filter>LibLinear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\tron.cpp">
+      <Filter>LibLinear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\blas\daxpy.c">
+      <Filter>LibLinear\blas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\blas\ddot.c">
+      <Filter>LibLinear\blas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\blas\dnrm2.c">
+      <Filter>LibLinear\blas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibLinear\blas\dscal.c">
+      <Filter>LibLinear\blas</Filter>
+    </ClCompile>
+    <ClCompile Include="gettimeofday.c">
+      <Filter>vc</Filter>
+    </ClCompile>
+    <ClCompile Include="dirent.c">
+      <Filter>vc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\apps\main.cpp">
+      <Filter>apps</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

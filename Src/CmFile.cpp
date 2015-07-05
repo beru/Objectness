@@ -1,7 +1,11 @@
 #include "kyheader.h"
 
+#ifdef _MSC_VER
+#include "dirent.h"
+#endif
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
 #include <Commdlg.h>

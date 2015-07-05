@@ -60,8 +60,8 @@ typedef unsigned short WORD;
 typedef unsigned int UNINT32;
 typedef bool BOOL;
 typedef void *HANDLE;
-typedef unsigned char byte;
 #endif
+typedef unsigned char byte;
 typedef vector<int> vecI;
 typedef const string CStr;
 typedef const Mat CMat;
@@ -90,7 +90,7 @@ template<class T, int D> inline T    vecDist(const Vec<T, D> &v1, const Vec<T, D
 
 inline Rect Vec4i2Rect(Vec4i &v){return Rect(Point(v[0] - 1, v[1] - 1), Point(v[2], v[3])); }
 #ifdef __WIN32
-    #define INT64 long long
+//    #define INT64 long long
 #else
     #define INT64 long
     typedef unsigned long UINT64;
@@ -98,7 +98,7 @@ inline Rect Vec4i2Rect(Vec4i &v){return Rect(Point(v[0] - 1, v[1] - 1), Point(v[
 
 #define __POPCNT__
 #include <immintrin.h>
-#include <popcntintrin.h>
+//#include <popcntintrin.h>
 #ifdef __WIN32
 # include <intrin.h>
 # define POPCNT(x) __popcnt(x)

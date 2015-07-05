@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B9FEC6DA-0345-4615-BB40-C39394703B1A}</ProjectGuid>
+    <RootNamespace>Objectness</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>B:\libs\opencv\modules\contrib\include;B:\libs\opencv\modules\highgui\include;B:\libs\opencv\modules\ml\include;B:\libs\opencv\modules\calib3d\include;B:\libs\opencv\modules\objdetect\include;B:\libs\opencv\modules\features2d\include;B:\libs\opencv\modules\video\include;B:\libs\opencv\modules\photo\include;B:\libs\opencv\modules\imgproc\include;B:\libs\opencv\modules\flann\include;B:\libs\opencv\modules\core\include;B:\libs\opencv\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>../;B:\libs\opencv\modules\contrib\include;B:\libs\opencv\modules\highgui\include;B:\libs\opencv\modules\ml\include;B:\libs\opencv\modules\calib3d\include;B:\libs\opencv\modules\objdetect\include;B:\libs\opencv\modules\features2d\include;B:\libs\opencv\modules\video\include;B:\libs\opencv\modules\photo\include;B:\libs\opencv\modules\imgproc\include;B:\libs\opencv\modules\flann\include;B:\libs\opencv\modules\core\include;B:\libs\opencv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>B:\libs\opencv\build\x64\vc11\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>B:\libs\opencv\modules\contrib\include;B:\libs\opencv\modules\highgui\include;B:\libs\opencv\modules\ml\include;B:\libs\opencv\modules\calib3d\include;B:\libs\opencv\modules\objdetect\include;B:\libs\opencv\modules\features2d\include;B:\libs\opencv\modules\video\include;B:\libs\opencv\modules\photo\include;B:\libs\opencv\modules\imgproc\include;B:\libs\opencv\modules\flann\include;B:\libs\opencv\modules\core\include;B:\libs\opencv\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>../;B:\libs\opencv\modules\contrib\include;B:\libs\opencv\modules\highgui\include;B:\libs\opencv\modules\ml\include;B:\libs\opencv\modules\calib3d\include;B:\libs\opencv\modules\objdetect\include;B:\libs\opencv\modules\features2d\include;B:\libs\opencv\modules\video\include;B:\libs\opencv\modules\photo\include;B:\libs\opencv\modules\imgproc\include;B:\libs\opencv\modules\flann\include;B:\libs\opencv\modules\core\include;B:\libs\opencv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>B:\libs\opencv\build\x64\vc11\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WIN32;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WIN32;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WIN32;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WIN32;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CmFile.h" />
+    <ClInclude Include="..\CmShow.h" />
+    <ClInclude Include="..\CmTimer.h" />
+    <ClInclude Include="..\DataSetVOC.h" />
+    <ClInclude Include="..\FilterTIG.h" />
+    <ClInclude Include="..\ImgContrastBB.h" />
+    <ClInclude Include="..\kyheader.h" />
+    <ClInclude Include="..\LibLinear\blas\blas.h" />
+    <ClInclude Include="..\LibLinear\blas\blasp.h" />
+    <ClInclude Include="..\LibLinear\linear.h" />
+    <ClInclude Include="..\LibLinear\tron.h" />
+    <ClInclude Include="..\Objectness.h" />
+    <ClInclude Include="..\ValStructVec.h" />
+    <ClInclude Include="dirent.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\apps\main.cpp" />
+    <ClCompile Include="..\CmFile.cpp" />
+    <ClCompile Include="..\CmShow.cpp" />
+    <ClCompile Include="..\DataSetVOC.cpp" />
+    <ClCompile Include="..\FilterTIG.cpp" />
+    <ClCompile Include="..\kyheader.cpp" />
+    <ClCompile Include="..\LibLinear\blas\daxpy.c" />
+    <ClCompile Include="..\LibLinear\blas\ddot.c" />
+    <ClCompile Include="..\LibLinear\blas\dnrm2.c" />
+    <ClCompile Include="..\LibLinear\blas\dscal.c" />
+    <ClCompile Include="..\LibLinear\linear.cpp" />
+    <ClCompile Include="..\LibLinear\tron.cpp" />
+    <ClCompile Include="..\Objectness.cpp" />
+    <ClCompile Include="dirent.c" />
+    <ClCompile Include="gettimeofday.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
