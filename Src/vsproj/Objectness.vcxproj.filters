@@ -62,7 +62,7 @@
     <ClInclude Include="..\LibLinear\blas\blasp.h">
       <Filter>LibLinear\blas</Filter>
     </ClInclude>
-    <ClInclude Include="dirent.h">
+    <ClInclude Include="msdirent.h">
       <Filter>vc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,9 +104,6 @@
       <Filter>LibLinear\blas</Filter>
     </ClCompile>
     <ClCompile Include="gettimeofday.c">
-      <Filter>vc</Filter>
-    </ClCompile>
-    <ClCompile Include="dirent.c">
       <Filter>vc</Filter>
     </ClCompile>
     <ClCompile Include="..\apps\main.cpp">

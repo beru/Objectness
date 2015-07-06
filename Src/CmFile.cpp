@@ -1,7 +1,9 @@
 #include "kyheader.h"
 
 #ifdef _MSC_VER
-#include "dirent.h"
+#include "msdirent.h"
+#else
+#include <dirent.h>
 #endif
 
 #ifdef _WIN32

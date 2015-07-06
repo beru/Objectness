@@ -149,7 +149,7 @@
     <ClInclude Include="..\LibLinear\tron.h" />
     <ClInclude Include="..\Objectness.h" />
     <ClInclude Include="..\ValStructVec.h" />
-    <ClInclude Include="dirent.h" />
+    <ClInclude Include="msdirent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\apps\main.cpp" />
@@ -165,7 +165,6 @@
     <ClCompile Include="..\LibLinear\linear.cpp" />
     <ClCompile Include="..\LibLinear\tron.cpp" />
     <ClCompile Include="..\Objectness.cpp" />
-    <ClCompile Include="dirent.c" />
     <ClCompile Include="gettimeofday.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
