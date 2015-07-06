@@ -18,7 +18,6 @@
 //#include <SDKDDKVer.h>
 #include <stdio.h>
 
-
 #include <assert.h>
 #include <string>
 #include <vector>
@@ -46,7 +45,6 @@ using namespace std;
 #else
 #define cvLIB(name) "opencv_" name CV_VERSION_ID
 #endif
-
 
 using namespace cv;
 #ifdef WIN32
@@ -98,13 +96,16 @@ inline Rect Vec4i2Rect(Vec4i &v){return Rect(Point(v[0] - 1, v[1] - 1), Point(v[
 
 #define __POPCNT__
 #include <immintrin.h>
-//#include <popcntintrin.h>
+
+#ifndef _MSC_VER
+#include <popcntintrin.h>
+#endif
+
 #ifdef __WIN32
 # include <intrin.h>
 # define POPCNT(x) __popcnt(x)
 # define POPCNT64(x) __popcnt64(x)
-#endif
-#ifndef __WIN32
+#else
 # define POPCNT(x) __builtin_popcount(x)
 # define POPCNT64(x) __builtin_popcountll(x)
 #endif

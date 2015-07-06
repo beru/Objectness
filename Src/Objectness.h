@@ -1,7 +1,9 @@
 #pragma once
+
 #include "DataSetVOC.h"
 #include "ValStructVec.h"
 #include "FilterTIG.h"
+
 class Objectness
 {
 public:
@@ -106,7 +108,7 @@ private: // Help functions
 	static inline int bgrMaxDist(const Vec3b &u, const Vec3b &v) {int b = abs(u[0]-v[0]), g = abs(u[1]-v[1]), r = abs(u[2]-v[2]); b = max(b,g);  return max(b,r);}
 	static inline int vecDist3b(const Vec3b &u, const Vec3b &v) {return abs(u[0]-v[0]) + abs(u[1]-v[1]) + abs(u[2]-v[2]);}
 
-	//Non-maximal suppress
+	// Non-maximal suppress
 	static void nonMaxSup(CMat &matchCost1f, ValStructVec<float, Point> &matchCost, int NSS = 1, int maxPoint = 50, bool fast = true);
 
 	static void PrintVector(FILE *f, const vecD &v, CStr &name);

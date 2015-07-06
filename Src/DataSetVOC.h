@@ -43,10 +43,11 @@ string DataSetVOC::keepXmlChar(CStr &_str)
 {
 	string str = _str;
 	int sz = (int)str.size(), count = 0;
-	for (int i = 0; i < sz; i++){
+	for (int i = 0; i < sz; i++) {
 		char c = str[i];
-		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' ' || c == '.')
+		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' ' || c == '.') {
 			str[count++] = str[i];
+		}
 	}
 	str.resize(count);
 	return str;
@@ -63,9 +64,10 @@ double DataSetVOC::interUnio(const Vec4i &bb, const Vec4i &bbgt)
 	double iw = bi[2] - bi[0] + 1;
 	double ih = bi[3] - bi[1] + 1;
 	double ov = 0;
-	if (iw>0 && ih>0){
+	if (iw>0 && ih>0) {
 		double ua = (bb[2]-bb[0]+1)*(bb[3]-bb[1]+1)+(bbgt[2]-bbgt[0]+1)*(bbgt[3]-bbgt[1]+1)-iw*ih;
 		ov = iw*ih/ua;
 	}	
 	return ov;
 }
+

@@ -1,8 +1,6 @@
 #include "kyheader.h"
 #include "CmShow.h"
 
-
-
 typedef pair<int, int> CostiIdx;
 Mat CmShow::HistBins(CMat& color3f, CMat& val, CStr& title, bool descendShow, CMat &with)
 {
@@ -10,10 +8,11 @@ Mat CmShow::HistBins(CMat& color3f, CMat& val, CStr& title, bool descendShow, CM
 	int H = 300, spaceH = 6, barH = 10, n = color3f.cols;
 	CV_Assert(color3f.size() == val.size() && color3f.rows == 1);
 	Mat binVal1i, binColor3b, width1i;
-	if (with.size() == val.size())
+	if (with.size() == val.size()) {
 		with.convertTo(width1i, CV_32S, 400/sum(with).val[0]); // Default shown width
-	else
+	}else {
 		width1i = Mat(1, n, CV_32S, Scalar(10)); // Default bin width = 10
+	}
 	int W = cvRound(sum(width1i).val[0]);
 	color3f.convertTo(binColor3b, CV_8UC3, 255);
 	double maxVal, minVal;
@@ -27,14 +26,14 @@ Mat CmShow::HistBins(CMat& color3f, CMat& val, CStr& title, bool descendShow, CM
 	Vec3b* binColor = (Vec3b*)(binColor3b.data);
 	int* binW = (int*)(width1i.data);
 	vector<CostiIdx> costIdx(n);
-	if (descendShow){
+	if (descendShow) {
 		for (int i = 0; i < n; i++)
 			costIdx[i] = make_pair(binH[i], i);
 		sort(costIdx.begin(), costIdx.end(), std::greater<CostiIdx>());
 	}
 
 	// Show image
-	for (int i = 0, x = 0; i < n; i++){
+	for (int i = 0, x = 0; i < n; i++) {
 		int idx = descendShow ? costIdx[i].second : i;
 		int h = descendShow ? abs(binH[idx]) : binH[idx];
 		Scalar color(binColor[idx]);
@@ -56,27 +55,30 @@ Mat CmShow::HistBins(CMat& color3f, CMat& val, CStr& title, bool descendShow, CM
 void CmShow::showTinyMat(CStr &title, CMat &m)
 {
 	int scale = 50, sz = m.rows * m.cols;
-	while (sz > 200){
+	while (sz > 200) {
 		scale /= 2;
 		sz /= 4;
 	}
 
 	Mat img;
 	resize(m, img, Size(), scale, scale, CV_INTER_NN);
-	if (img.channels() == 3)
+	if (img.channels() == 3) {
 		cvtColor(img, img, CV_RGB2BGR);
+	}
 	SaveShow(img, title);
 }
 
 void CmShow::SaveShow(CMat& img, CStr& title)
 {
-	if (title.size() == 0)
+	if (title.size() == 0) {
 		return;
+	}
 
 	int mDepth = CV_MAT_DEPTH(img.type());
 	double scale = (mDepth == CV_32F || mDepth == CV_64F ? 255 : 1);
-	if (title.size() > 4 && title[title.size() - 4] == '.')
+	if (title.size() > 4 && title[title.size() - 4] == '.') {
 		imwrite(title, img*scale);
-	else if (title.size())
-		imshow(title, img);		
+	}else if (title.size()) {
+		imshow(title, img);
+	}
 }

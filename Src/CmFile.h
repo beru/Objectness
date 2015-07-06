@@ -1,4 +1,5 @@
 #pragma once
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -8,6 +9,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #endif
+
 struct CmFile
 {
 	static inline string GetFolder(CStr& path);
@@ -15,26 +17,26 @@ struct CmFile
 	static inline string GetNameNE(CStr& path);
 	static inline string GetPathNE(CStr& path);
 
-    // Get file names from a wildcard. Eg: GetNames("D:\\*.jpg", imgNames);
-    static int GetNames(CStr &nameW, vecS &names, string &_dir);
-    static int GetNames(CStr &nameW, vecS &names);
-    static int GetNames(CStr& rootFolder, CStr &fileW, vecS &names);
-    static int GetNamesNE(CStr& nameWC, vecS &names, string &dir, string &ext);
-    static int GetNamesNE(CStr& nameWC, vecS &names);
-    static int GetNamesNE(CStr& rootFolder, CStr &fileW, vecS &names);
-    static inline string GetExtention(CStr name);
+	// Get file names from a wildcard. Eg: GetNames("D:\\*.jpg", imgNames);
+	static int GetNames(CStr &nameW, vecS &names, string &_dir);
+	static int GetNames(CStr &nameW, vecS &names);
+	static int GetNames(CStr& rootFolder, CStr &fileW, vecS &names);
+	static int GetNamesNE(CStr& nameWC, vecS &names, string &dir, string &ext);
+	static int GetNamesNE(CStr& nameWC, vecS &names);
+	static int GetNamesNE(CStr& rootFolder, CStr &fileW, vecS &names);
+	static inline string GetExtention(CStr name);
 
-    static int GetSubFolders(CStr& folder, vecS& subFolders);
+	static int GetSubFolders(CStr& folder, vecS& subFolders);
 
 	static inline string GetWkDir();
 
-    static bool MkDir(CStr&  path);
+	static bool MkDir(CStr&	 path);
 	static vecS loadStrList(CStr &fName);
 	static bool writeStrList(CStr &fName, const vecS &strs);
 };
 
 /************************************************************************/
-/* Implementation of inline functions                                   */
+/* Implementation of inline functions									*/
 /************************************************************************/
 string CmFile::GetFolder(CStr& path)
 {
@@ -71,6 +73,7 @@ string CmFile::GetExtention(CStr name)
 {
 	return name.substr(name.find_last_of('.'));
 }
+
 /************************************************************************/
-/*                   Implementations                                    */
+/*					 Implementations									*/
 /************************************************************************/

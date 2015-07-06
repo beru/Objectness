@@ -3,20 +3,17 @@
 #include "ValStructVec.h"
 #include "CmShow.h"
 
-
 void RunObjectness(CStr &resName, double base, int W, int NSS, int numPerSz);
 
 void illutrateLoG()
 {
-    for (float delta = 0.5f; delta < 1.1f; delta+=0.1f){
+    for (float delta = 0.5f; delta < 1.1f; delta+=0.1f) {
         Mat f = Objectness::aFilter(delta, 8);
         normalize(f, f, 0, 1, NORM_MINMAX);
         CmShow::showTinyMat(format("D=%g", delta), f);
     }
     waitKey(0);
 }
-
-
 
 int main(int argc, char* argv[])
 {

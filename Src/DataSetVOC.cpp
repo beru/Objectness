@@ -4,7 +4,6 @@
 
 DataSetVOC::DataSetVOC(CStr &_wkDir)
 {
-
 	wkDir = _wkDir;
 	resDir = wkDir + "Results/";
 	localDir = wkDir + "Local/";
@@ -13,8 +12,8 @@ DataSetVOC::DataSetVOC(CStr &_wkDir)
 	CmFile::MkDir(resDir);
 	CmFile::MkDir(localDir);
 
-    trainSet = CmFile::loadStrList(wkDir + "ImageSets/Main/train.txt");
-    testSet = CmFile::loadStrList(wkDir + "ImageSets/Main/val.txt");
+	trainSet = CmFile::loadStrList(wkDir + "ImageSets/Main/train.txt");
+	testSet = CmFile::loadStrList(wkDir + "ImageSets/Main/val.txt");
 	classNames = CmFile::loadStrList(wkDir + "cls-list.txt");
 
 	// testSet.insert(testSet.end(), trainSet.begin(), trainSet.end());
@@ -28,15 +27,16 @@ DataSetVOC::DataSetVOC(CStr &_wkDir)
 Vec4i getMaskRange(CMat &mask1u, int ext = 0)
 {
 	int maxX = INT_MIN, maxY = INT_MIN, minX = INT_MAX, minY = INT_MAX, rows = mask1u.rows, cols = mask1u.cols;
-	for (int r = 0; r < rows; r++)	{
+	for (int r = 0; r < rows; r++) {
 		const byte* data = mask1u.ptr<byte>(r);
-		for (int c = 0; c < cols; c++)
+		for (int c = 0; c < cols; c++) {
 			if (data[c] > 10) {
 				maxX = max(maxX, c);
 				minX = min(minX, c);
 				maxY = max(maxY, r);
 				minY = min(minY, r);
 			}
+		}
 	}
 
 	maxX = maxX + ext + 1 < cols ? maxX + ext + 1 : cols;
@@ -56,15 +56,19 @@ void DataSetVOC::loadAnnotations()
 {
 	gtTrainBoxes.resize(trainNum);
 	gtTrainClsIdx.resize(trainNum);
-	for (int i = 0; i < trainNum; i++)
-		if (!loadBBoxes(trainSet[i], gtTrainBoxes[i], gtTrainClsIdx[i]))
+	for (int i = 0; i < trainNum; i++) {
+		if (!loadBBoxes(trainSet[i], gtTrainBoxes[i], gtTrainClsIdx[i])) {
 			return;
+		}
+	}
 
 	gtTestBoxes.resize(testNum);
 	gtTestClsIdx.resize(testNum);
-	for (int i = 0; i < testNum; i++)
-		if(!loadBBoxes(testSet[i], gtTestBoxes[i], gtTestClsIdx[i]))
+	for (int i = 0; i < testNum; i++) {
+		if (!loadBBoxes(testSet[i], gtTestBoxes[i], gtTestClsIdx[i])) {
 			return;
+		}
+	}
 	printf("Load annotations finished\n");
 }
 
@@ -77,26 +81,26 @@ void DataSetVOC::loadDataGenericOverCls()
 	trainSet.reserve(imgN), testSet.reserve(imgN);
 	vector<vector<Vec4i>> gtBoxes(imgN);
 	vector<vecI> gtClsIdx(imgN);
-	for (int i = 0; i < imgN; i++){
-		if (!loadBBoxes(allSet[i], gtBoxes[i], gtClsIdx[i]))
+	for (int i = 0; i < imgN; i++) {
+		if (!loadBBoxes(allSet[i], gtBoxes[i], gtClsIdx[i])) {
 			return;
+		}
 		vector<Vec4i> trainBoxes, testBoxes;
 		vecI trainIdx, testIdx;
-		for (size_t j = 0; j < gtBoxes[i].size(); j++)
-			if (gtClsIdx[i][j] < 6){
+		for (size_t j = 0; j < gtBoxes[i].size(); j++) {
+			if (gtClsIdx[i][j] < 6) {
 				trainBoxes.push_back(gtBoxes[i][j]);
 				trainIdx.push_back(gtClsIdx[i][j]);
-			}
-			else{
+			}else {
 				testBoxes.push_back(gtBoxes[i][j]);
 				testIdx.push_back(gtClsIdx[i][j]);
 			}
-		if (trainBoxes.size()){
+		}
+		if (trainBoxes.size()) {
 			trainSet.push_back(allSet[i]);
 			gtTrainBoxes.push_back(trainBoxes);
 			gtTrainClsIdx.push_back(trainIdx);
-		}
-		else{
+		}else {
 			testSet.push_back(allSet[i]);
 			gtTestBoxes.push_back(testBoxes);
 			gtTestClsIdx.push_back(testIdx);
@@ -110,15 +114,17 @@ void DataSetVOC::loadDataGenericOverCls()
 void DataSetVOC::loadBox(const FileNode &fn, vector<Vec4i> &boxes, vecI &clsIdx){
 	string isDifficult;
 	fn["difficult"]>>isDifficult;
-	if (isDifficult == "1")
+	if (isDifficult == "1") {
 		return;
+	}
 
 	string clsName;
 	fn["name"]>>clsName;
-    int idx = findFromList(clsName, classNames);
+	int idx = findFromList(clsName, classNames);
 
-    if (idx == -1)
-        return;
+	if (idx == -1) {
+		return;
+	}
 	clsIdx.push_back(idx);
 
 	string strXmin, strYmin, strXmax, strYmax;
@@ -136,29 +142,29 @@ bool DataSetVOC::loadBBoxes(CStr &nameNE, vector<Vec4i> &boxes, vecI &clsIdx)
 	FileStorage fs(fName, FileStorage::READ);
 	FileNode fn = fs["annotation"]["object"];
 
-    string widthStr, heightStr;
-    fs["annotation"]["size"]["width"] >> widthStr;
-    fs["annotation"]["size"]["height"] >> heightStr;
+	string widthStr, heightStr;
+	fs["annotation"]["size"]["width"] >> widthStr;
+	fs["annotation"]["size"]["height"] >> heightStr;
 
-    int cols = atoi(_S(widthStr));
-    int rows = atoi(_S(heightStr));
+	int cols = atoi(_S(widthStr));
+	int rows = atoi(_S(heightStr));
 
 	boxes.clear();
 	clsIdx.clear();
-	if (fn.isSeq()){
-        for (FileNodeIterator it = fn.begin(), it_end = fn.end(); it != it_end; it++){
-            loadBox(*it, boxes, clsIdx);
-        }
-	}
-	else
+	if (fn.isSeq()) {
+		for (FileNodeIterator it = fn.begin(), it_end = fn.end(); it != it_end; it++) {
+			loadBox(*it, boxes, clsIdx);
+		}
+	}else {
 		loadBox(fn, boxes, clsIdx);
+	}
 
-    for (auto boxes_iter = boxes.begin(); boxes_iter != boxes.end(); boxes_iter++) {
-        (*boxes_iter)[0] = max(1, (*boxes_iter)[0]);
-        (*boxes_iter)[1] = max(1, (*boxes_iter)[1]);
-        (*boxes_iter)[2] = min(cols, (*boxes_iter)[2]);
-        (*boxes_iter)[3] = min(rows, (*boxes_iter)[3]);
-    }
+	for (auto boxes_iter = boxes.begin(); boxes_iter != boxes.end(); boxes_iter++) {
+		(*boxes_iter)[0] = max(1, (*boxes_iter)[0]);
+		(*boxes_iter)[1] = max(1, (*boxes_iter)[1]);
+		(*boxes_iter)[2] = min(cols, (*boxes_iter)[2]);
+		(*boxes_iter)[3] = min(rows, (*boxes_iter)[3]);
+	}
 	return true;
 }
 
@@ -168,7 +174,7 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &annoDir)
 	vecS namesNE;
 	int imgNum = CmFile::GetNamesNE(annoDir + "*.yaml", namesNE);
 	printf("Converting annotations to OpenCV yml format:\n");
-	for (int i = 0; i < imgNum; i++){
+	for (int i = 0; i < imgNum; i++) {
 		printf("%d/%d %s.yaml\r", i, imgNum, _S(namesNE[i]));
 		string fPath = annoDir + namesNE[i];
 		cvt2OpenCVYml(fPath + ".yaml", fPath + ".yml");
@@ -181,26 +187,32 @@ bool DataSetVOC::cvt2OpenCVYml(CStr &yamlName, CStr &ymlName)
 {
 	ifstream f(yamlName);
 	FILE *fO = fopen(_S(ymlName), "w");
-	if (!f.is_open() && fO == NULL)
+	if (!f.is_open() && fO == NULL) {
 		return false;
+	}
 	fprintf(fO, "%s\n", "%YAML:1.0\n");
 	string line;
 
 	int addIdent = 0;
-	while(getline(f, line)){
-		if (line.substr(0, 12) == "  filename: ")
+	while (getline(f, line)) {
+		if (line.substr(0, 12) == "	 filename: ") {
 			line = "  filename: \"" + line.substr(12) + "\"";
-		size_t tmp = line.find_first_of('-');
-		if (tmp != string::npos){
-			bool allSpace = true;
-			for (size_t k = 0; k < tmp; k++)
-				if (line[k] != ' ')
-					allSpace = false;
-			if (allSpace)
-				addIdent = tmp;
 		}
-		for (int k = 0; k < addIdent; k++)
+		size_t tmp = line.find_first_of('-');
+		if (tmp != string::npos) {
+			bool allSpace = true;
+			for (size_t k = 0; k < tmp; k++) {
+				if (line[k] != ' ') {
+					allSpace = false;
+				}
+			}
+			if (allSpace) {
+				addIdent = tmp;
+			}
+		}
+		for (int k = 0; k < addIdent; k++) {
 			fprintf(fO, " ");
+		}
 		fprintf(fO, "%s\n", _S(line));
 	}
 	fclose(fO);
@@ -217,7 +229,7 @@ void DataSetVOC::getTrainTest()
 {
 	//const int TRAIN_CLS_NUM = 6;
 	//string trainCls[TRAIN_CLS_NUM] = {"bird", "car", "cat", "cow", "dog", "sheep"};
-    return;
+	return;
 }
 
 void DataSetVOC::getXmlStrVOC(CStr &fName, string &buf)
@@ -230,10 +242,11 @@ void DataSetVOC::getXmlStrVOC(CStr &fName, string &buf)
 	while (getline(fin, strLine) && strLine.size())	{
 		int startP = strLine.find_first_of(">") + 1;
 		int endP = strLine.find_last_of("<");
-		if (endP > startP){
+		if (endP > startP) {
 			string val = keepXmlChar(strLine.substr(startP, endP - startP));
-			if (val.size() < (unsigned)(endP - startP))
+			if (val.size() < (unsigned)(endP - startP)) {
 				strLine = strLine.substr(0, startP) + val + strLine.substr(endP);
+			}
 		}
 		buf += strLine + "\n";
 	}
@@ -242,3 +255,4 @@ void DataSetVOC::getXmlStrVOC(CStr &fName, string &buf)
 	ofstream fout("D:/t.xml");
 	fout<< buf;
 }
+
